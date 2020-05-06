@@ -4,6 +4,8 @@
 #include "main.h"
 #include "network.h"
 
+void tap_read(int fd, fd_set *fds, char *buffer, size_t bufsize, ssize_t *size);
+
 void tap_listen(sa_family_t af, int fd, int sock_fd, uint16_t tid, const struct sockaddr *dst, socklen_t dst_len);
 
 int tap_open(const char *if_name, int mtu);

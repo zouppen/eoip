@@ -22,12 +22,12 @@ void socket_listen(sa_family_t af, int fd, int tap_fd, uint16_t tid) {
     ssize_t recv_size;
     size_t hdr_size, read_offset;
 
-    const uint8_t tpl6[] = {(uint8_t) ((((uint8_t *) tid)[0] << 4) | 0x03), (uint8_t) tid};
+    //const uint8_t tpl6[] = {tid >> 8 (uint8_t) ((((uint8_t *) tid)[0] << 4) | 0x03), (uint8_t) tid};
 
     fprintf(stderr, "[INFO] Socket listener started\n");
 
     while (true) {
-        socket_read(fd, fds, &buffer[0], BUFFER_LENGTH, &recv_size);
+        socket_read(fd, fds, buffer, BUFFER_LENGTH, &recv_size);
 
         switch (af) {
 #if __BYTE_ORDER == __BIG_ENDIAN
@@ -48,14 +48,15 @@ void socket_listen(sa_family_t af, int fd, int tap_fd, uint16_t tid) {
 
                 break;
             case AF_INET6:
-                pkt = (union eoip_unified_t *) buffer;
+	      assert(false);
+	      /*                pkt = (union eoip_unified_t *) buffer;
                 read_offset = (size_t) (buffer + 2);
 
                 if (recv_size < 2)                                                          // invalid eoip6 header
                     continue;
                 if (memcmp(pkt, tpl6, 2) != 0)
                     continue;
-
+	      */
                 break;
 #endif
             default:

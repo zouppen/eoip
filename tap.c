@@ -13,7 +13,7 @@
 #include <unistd.h>
 #include "tap.h"
 
-inline void tap_read(int fd, fd_set *fds, char *buffer, size_t bufsize, ssize_t *size) {
+void tap_read(int fd, fd_set *fds, char *buffer, size_t bufsize, ssize_t *size) {
     FD_ZERO(fds);
     FD_SET(fd, fds);
     select(fd, fds, NULL, NULL, NULL);
@@ -36,9 +36,11 @@ void tap_listen(sa_family_t af, int fd, int sock_fd, uint16_t tid, const struct 
 #elif __BYTE_ORDER == LITTLE_ENDIAN
         case AF_INET:
             pkt.pkt.tid = tid;
+	    break;
         case AF_INET6:
             pkt.pkt6.hdr1 = (uint8_t) ((((uint8_t *) tid)[0] << 4) | 0x03);
             pkt.pkt6.hdr2 = (uint8_t) tid;
+	    break;
 #endif
 
         default:
